@@ -23,10 +23,7 @@ public class Main {
 
         int id = ++lastArticleId;
 
-        Article article = new Article();
-        article.id = id;
-        article.subject = subject;
-        article.content = content;
+        Article article = new Article(id, subject, content);
 
         System.out.println("생성 된 게시물 객체 : " + article);
 
