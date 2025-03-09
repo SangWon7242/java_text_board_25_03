@@ -34,7 +34,7 @@ public class Main {
 
     makeArticleTestData(articles);
 
-    int lastArticleId = 0;
+    int lastArticleId = articles.get(articles.size() - 1).id;
     Article lastArticle = null;
 
     System.out.println("== JAVA 텍스트 게시판 구현 ==");
