@@ -35,8 +35,7 @@ public class Main {
     makeArticleTestData(articles);
 
     int lastArticleId = articles.get(articles.size() - 1).id;
-    Article lastArticle = null;
-
+    
     System.out.println("== JAVA 텍스트 게시판 구현 ==");
 
     while (true) {
@@ -54,14 +53,20 @@ public class Main {
         int id = ++lastArticleId;
 
         Article article = new Article(id, subject, content);
-        lastArticle = article;
 
         articles.add(article);
         System.out.printf("%d번 게시물이 등록되었습니다.\n", article.id);
       }
       else if(cmd.equals("/usr/article/detail")) {
-        Article article = lastArticle;
-
+        // 리스트에 게시물이 비어 있는 경우
+        if(articles.isEmpty()) {
+          System.out.println("게시물이 존재하지 않습니다.");
+          continue;
+        }
+        
+        Article article = articles.get(articles.size() - 1);
+        
+        // 해당 게시물이 없는 경우
         if(article == null) {
           System.out.println("게시물이 존재하지 않습니다.");
           continue;
