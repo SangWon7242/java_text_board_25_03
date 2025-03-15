@@ -5,9 +5,9 @@ import com.sbs.java.text_board.util.Util;
 import java.util.Map;
 
 public class Rq {
-  public String url;
-  public Map<String, String> params;
-  public String urlPath;
+  private String url;
+  private Map<String, String> params;
+  private String urlPath;
 
   public Rq(String url) {
     this.url = url;
@@ -15,11 +15,11 @@ public class Rq {
     urlPath = Util.getPathFromUrl(this.url);
   }
 
-  Map<String, String> getParams() {
+  public Map<String, String> getParams() {
     return params;
   }
 
-  String getUrlPath() {
+  public String getUrlPath() {
     return urlPath;
   }
 }
