@@ -8,10 +8,8 @@ public class AppTest {
     Map<String, String> params = Util.getParamsFromUrl(url);
     System.out.println(params);
 
-    System.out.println(params.get("subject")); // 자바 코드 질문 있어요.
-    System.out.println(params.get("content")); // 자바에서 1+2=3을 어떻게 표현하나요?
-    System.out.println(params.get("writerName")); // 홍길동
-    System.out.println(params.get("boardId")); // 1
+    String urlPath = Util.getPathFromUrl(url);
+    System.out.println(urlPath); // /usr/article/write
 
   }
 }
@@ -35,5 +33,9 @@ class Util {
     }
 
     return params;
+  }
+
+  static String getPathFromUrl(String url) {
+    return url.split("\\?", 2)[0];
   }
 }
