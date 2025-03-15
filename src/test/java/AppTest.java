@@ -6,30 +6,45 @@ public class AppTest {
     Rq rq = new Rq("/usr/article/write?subject=자바 코드 질문 있어요.&content=자바에서 1+2=3을 어떻게 표현하나요?&writerName=홍길동&boardId=1");
     Map<String, String> params = rq.getParams();
     System.out.println(params);
+    System.out.println(rq.getParams());
+    System.out.println(rq.getParams());
 
     String urlPath = rq.getUrlPath();
     System.out.println(urlPath); // /usr/article/write
+    System.out.println(rq.getUrlPath());
+    System.out.println(rq.getUrlPath());
   }
 }
 
 class Rq {
   String url;
+  Map<String, String> params;
+  String urlPath;
 
   Rq(String url) {
     this.url = url;
   }
 
   Map<String, String> getParams() {
-    return Util.getParamsFromUrl(url);
+    if(params == null) {
+      params = Util.getParamsFromUrl(url);
+    }
+
+    return params;
   }
 
   String getUrlPath() {
-    return Util.getPathFromUrl(url);
+    if(urlPath == null) {
+      urlPath = Util.getPathFromUrl(url);
+    }
+
+    return urlPath;
   }
 }
 
 class Util {
   static Map<String, String> getParamsFromUrl(String url) {
+    System.out.println("getParamsFromUrl 실행!!!");
     Map<String, String> params = new HashMap<>();
 
     String[] urlBits = url.split("\\?", 2);
@@ -50,6 +65,7 @@ class Util {
   }
 
   static String getPathFromUrl(String url) {
+    System.out.println("getPathFromUrl 실행!!!");
     return url.split("\\?", 2)[0];
   }
 }
