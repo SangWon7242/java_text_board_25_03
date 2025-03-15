@@ -3,14 +3,28 @@ import java.util.Map;
 
 public class AppTest {
   public static void main(String[] args) {
-    // 파라미터 분석
-    String url = "/usr/article/write?subject=자바 코드 질문 있어요.&content=자바에서 1+2=3을 어떻게 표현하나요?&writerName=홍길동&boardId=1";
-    Map<String, String> params = Util.getParamsFromUrl(url);
+    Rq rq = new Rq("/usr/article/write?subject=자바 코드 질문 있어요.&content=자바에서 1+2=3을 어떻게 표현하나요?&writerName=홍길동&boardId=1");
+    Map<String, String> params = rq.getParams();
     System.out.println(params);
 
-    String urlPath = Util.getPathFromUrl(url);
+    String urlPath = rq.getUrlPath();
     System.out.println(urlPath); // /usr/article/write
+  }
+}
 
+class Rq {
+  String url;
+
+  Rq(String url) {
+    this.url = url;
+  }
+
+  Map<String, String> getParams() {
+    return Util.getParamsFromUrl(url);
+  }
+
+  String getUrlPath() {
+    return Util.getPathFromUrl(url);
   }
 }
 
