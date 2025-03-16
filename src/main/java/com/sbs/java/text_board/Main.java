@@ -87,29 +87,28 @@ public class Main {
 
         Map<String, String> params = rq.getParams();
 
-        boolean orderByIdDesc = true;
+        List<Article> sortedArticles = new ArrayList<>(articles);
 
-        if(params.containsKey("orderBy") && params.get("orderBy").equals("idAsc")) {
-           orderByIdDesc = false;
+        if(params.containsKey("orderBy")) {
+          String orderBy = params.get("orderBy");
+
+          switch (orderBy) {
+            case "idAsc":
+              sortedArticles.sort((a1, a2) -> a1.id - a2.id);
+              break;
+            case "idDesc":
+            default:
+              sortedArticles.sort((a1, a2) -> a2.id - a1.id);
+              break;
+          }
         }
 
         System.out.println("== 게시물 리스트 ==");
         System.out.println("번호 | 제목");
 
-        if(orderByIdDesc) {
-          // 역순 출력
-          for (int i = articles.size() - 1; i >= 0; i--) {
-            Article article = articles.get(i);
-            System.out.printf("%d | %s\n", article.id, article.subject);
-          }
-        }
-        else {
-          articles.forEach(
-              article -> System.out.printf("%d | %s\n", article.id, article.subject)
-          );
-        }
-
-
+        sortedArticles.forEach(
+            article -> System.out.printf("%d | %s\n", article.id, article.subject)
+        );
 
       } else if (rq.getUrlPath().equals("exit")) {
         System.out.println("게시판 프로그램을 종료합니다.");
