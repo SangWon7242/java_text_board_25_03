@@ -2,10 +2,7 @@ package com.sbs.java.text_board;
 
 import com.sbs.java.text_board.base.Rq;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.IntStream;
 
 public class Main {
@@ -88,15 +85,32 @@ public class Main {
           continue;
         }
 
-        System.out.println("== 게시물 리스트 ==");
+        Map<String, String> params = rq.getParams();
 
+        boolean orderByIdDesc = true;
+
+        if(params.containsKey("orderBy") && params.get("orderBy").equals("idAsc")) {
+           orderByIdDesc = false;
+        }
+
+        System.out.println("== 게시물 리스트 ==");
         System.out.println("번호 | 제목");
 
-        // 역순 출력
-        for (int i = articles.size() - 1; i >= 0; i--) {
-          Article article = articles.get(i);
-          System.out.printf("%d | %s\n", article.id, article.subject);
+        if(orderByIdDesc) {
+          // 역순 출력
+          for (int i = articles.size() - 1; i >= 0; i--) {
+            Article article = articles.get(i);
+            System.out.printf("%d | %s\n", article.id, article.subject);
+          }
         }
+        else {
+          articles.forEach(
+              article -> System.out.printf("%d | %s\n", article.id, article.subject)
+          );
+        }
+
+
+
       } else if (rq.getUrlPath().equals("exit")) {
         System.out.println("게시판 프로그램을 종료합니다.");
         break;
