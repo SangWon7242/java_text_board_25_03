@@ -8,7 +8,7 @@ import java.util.stream.IntStream;
 
 public class Main {
   private static void makeArticleTestData(List<Article> articles) {
-    IntStream.rangeClosed(1, 3)
+    IntStream.rangeClosed(1, 100)
         .forEach(
             i -> articles.add(new Article(i, "제목" + i, "내용" + i))
         );
