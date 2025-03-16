@@ -87,18 +87,38 @@ public class Main {
         }
 
         Map<String, String> params = rq.getParams();
+        
+        // 검색 기능 시작
+        // articles : 현재 정렬되지 않은 1 ~ 100개의 게시물 리스트
+        List<Article> filteredArticles = articles;
 
+        if(params.containsKey("searchKeyword")) {
+          String searchKeyword = params.get("searchKeyword");
+
+          filteredArticles = new ArrayList<>();
+
+          for(Article article : articles) {
+            boolean matched = article.subject.contains(searchKeyword) || article.content.contains(searchKeyword);
+
+            if(matched) filteredArticles.add(article);
+          }
+        }
+
+        // 검색 기능 끝
+        
+        // 정렬 로직 시작
         boolean orderByIdDesc = true;
 
         if(params.containsKey("orderBy") && params.get("orderBy").equals("idAsc")) {
           orderByIdDesc = false;
         }
 
-        List<Article> sortedArticles = articles;
+        List<Article> sortedArticles = filteredArticles;
 
         if(orderByIdDesc) {
           sortedArticles = Util.reverseList(sortedArticles);
         }
+        // 정렬 로직 끝
 
         System.out.println("== 게시물 리스트 ==");
         System.out.println("번호 | 제목");
