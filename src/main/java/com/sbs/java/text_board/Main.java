@@ -1,6 +1,7 @@
 package com.sbs.java.text_board;
 
 import com.sbs.java.text_board.base.Rq;
+import com.sbs.java.text_board.util.Util;
 
 import java.util.*;
 import java.util.stream.IntStream;
@@ -87,20 +88,16 @@ public class Main {
 
         Map<String, String> params = rq.getParams();
 
-        List<Article> sortedArticles = new ArrayList<>(articles);
+        boolean orderByIdDesc = true;
 
-        if(params.containsKey("orderBy")) {
-          String orderBy = params.get("orderBy");
+        if(params.containsKey("orderBy") && params.get("orderBy").equals("idAsc")) {
+          orderByIdDesc = false;
+        }
 
-          switch (orderBy) {
-            case "idAsc":
-              sortedArticles.sort((a1, a2) -> a1.id - a2.id);
-              break;
-            case "idDesc":
-            default:
-              sortedArticles.sort((a1, a2) -> a2.id - a1.id);
-              break;
-          }
+        List<Article> sortedArticles = articles;
+
+        if(orderByIdDesc) {
+          sortedArticles = Util.reverseList(sortedArticles);
         }
 
         System.out.println("== 게시물 리스트 ==");
