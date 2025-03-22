@@ -7,7 +7,10 @@ import java.util.*;
 import java.util.stream.IntStream;
 
 public class Main {
-  private static void makeArticleTestData(List<Article> articles) {
+  static List<Article> articles = new ArrayList<>();
+  static int lastArticleId = 0;
+
+  private static void makeArticleTestData() {
     IntStream.rangeClosed(1, 100)
         .forEach(
             i -> articles.add(new Article(i, "제목" + i, "내용" + i))
@@ -17,11 +20,7 @@ public class Main {
   public static void main(String[] args) {
     Scanner sc = new Scanner(System.in);
 
-    List<Article> articles = new ArrayList<>();
-
-    makeArticleTestData(articles);
-
-    int lastArticleId = articles.get(articles.size() - 1).id;
+    makeArticleTestData();
 
     System.out.println("== JAVA 텍스트 게시판 구현 ==");
 
@@ -32,16 +31,15 @@ public class Main {
       Rq rq = new Rq(cmd);
 
       if (rq.getUrlPath().equals("/usr/article/write")) {
-        actionUsrArticleDoWrite(sc, lastArticleId, articles);
-        lastArticleId++;
+        actionUsrArticleDoWrite(sc);
       } else if (rq.getUrlPath().equals("/usr/article/detail")) {
-        actionUsrArticleShowDetail(articles, rq);
+        actionUsrArticleShowDetail(rq);
       } else if (rq.getUrlPath().equals("/usr/article/list")) {
-        actionUsrArticleShowList(articles, rq);
+        actionUsrArticleShowList(rq);
       } else if (rq.getUrlPath().equals("/usr/article/modify")) {
-        actionUsrArticleDoModify(sc, articles, rq);
+        actionUsrArticleDoModify(sc, rq);
       } else if (rq.getUrlPath().equals("/usr/article/delete")) {
-        actionUsrArticleDoDelete(articles, rq);
+        actionUsrArticleDoDelete(rq);
       } else if (rq.getUrlPath().equals("exit")) {
         System.out.println("게시판 프로그램을 종료합니다.");
         break;
@@ -54,7 +52,7 @@ public class Main {
     sc.close();
   }
 
-  private static void actionUsrArticleDoDelete(List<Article> articles, Rq rq) {
+  private static void actionUsrArticleDoDelete(Rq rq) {
     Map<String, String> params = rq.getParams();
 
     if (!params.containsKey("id")) {
@@ -79,7 +77,7 @@ public class Main {
 
     Article article = findById(articles, id);
 
-    if(article == null) {
+    if (article == null) {
       System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
       return;
     }
@@ -89,7 +87,7 @@ public class Main {
     System.out.printf("%d번 게시물을 삭제하였습니다.\n", id);
   }
 
-  private static void actionUsrArticleDoModify(Scanner sc, List<Article> articles, Rq rq) {
+  private static void actionUsrArticleDoModify(Scanner sc, Rq rq) {
     Map<String, String> params = rq.getParams();
 
     if (!params.containsKey("id")) {
@@ -114,7 +112,7 @@ public class Main {
 
     Article article = findById(articles, id);
 
-    if(article == null) {
+    if (article == null) {
       System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
       return;
     }
@@ -128,7 +126,9 @@ public class Main {
     System.out.printf("%d번 게시물이 수정되었습니다.\n", article.id);
   }
 
-  private static void actionUsrArticleDoWrite(Scanner sc, int lastArticleId, List<Article> articles) {
+  private static void actionUsrArticleDoWrite(Scanner sc) {
+    lastArticleId = articles.get(articles.size() - 1).id;
+
     System.out.println("== 게시물 작성 ==");
     System.out.print("제목 : ");
     String subject = sc.nextLine();
@@ -144,7 +144,7 @@ public class Main {
     System.out.printf("%d번 게시물이 등록되었습니다.\n", article.id);
   }
 
-  private static void actionUsrArticleShowDetail(List<Article> articles, Rq rq) {
+  private static void actionUsrArticleShowDetail(Rq rq) {
     Map<String, String> params = rq.getParams();
 
     if (!params.containsKey("id")) {
@@ -169,7 +169,7 @@ public class Main {
 
     Article article = findById(articles, id);
 
-    if(article == null) {
+    if (article == null) {
       System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
       return;
     }
@@ -180,7 +180,7 @@ public class Main {
     System.out.printf("내용 : %s\n", article.content);
   }
 
-  private static void actionUsrArticleShowList(List<Article> articles, Rq rq) {
+  private static void actionUsrArticleShowList(Rq rq) {
     if (articles.isEmpty()) {
       System.out.println("게시물이 존재하지 않습니다.");
       return;
