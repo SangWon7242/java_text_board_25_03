@@ -32,19 +32,8 @@ public class Main {
       Rq rq = new Rq(cmd);
 
       if (rq.getUrlPath().equals("/usr/article/write")) {
-        System.out.println("== 게시물 작성 ==");
-        System.out.print("제목 : ");
-        String subject = sc.nextLine();
-
-        System.out.print("내용 : ");
-        String content = sc.nextLine();
-
-        int id = ++lastArticleId;
-
-        Article article = new Article(id, subject, content);
-
-        articles.add(article);
-        System.out.printf("%d번 게시물이 등록되었습니다.\n", article.id);
+        actionUsrArticleDoWrite(sc, lastArticleId, articles);
+        lastArticleId++;
       } else if (rq.getUrlPath().equals("/usr/article/detail")) {
         actionUsrArticleShowDetail(articles, rq);
       } else if (rq.getUrlPath().equals("/usr/article/list")) {
@@ -61,10 +50,26 @@ public class Main {
     sc.close();
   }
 
+  private static void actionUsrArticleDoWrite(Scanner sc, int lastArticleId, List<Article> articles) {
+    System.out.println("== 게시물 작성 ==");
+    System.out.print("제목 : ");
+    String subject = sc.nextLine();
+
+    System.out.print("내용 : ");
+    String content = sc.nextLine();
+
+    int id = ++lastArticleId;
+
+    Article article = new Article(id, subject, content);
+
+    articles.add(article);
+    System.out.printf("%d번 게시물이 등록되었습니다.\n", article.id);
+  }
+
   private static void actionUsrArticleShowDetail(List<Article> articles, Rq rq) {
     Map<String, String> params = rq.getParams();
 
-    if(!params.containsKey("id")) {
+    if (!params.containsKey("id")) {
       System.out.println("id값을 입력해주세요.");
       return;
     }
@@ -84,7 +89,7 @@ public class Main {
       return;
     }
 
-    if(id > articles.size()) {
+    if (id > articles.size()) {
       System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
       return;
     }
@@ -109,15 +114,15 @@ public class Main {
     // articles : 현재 정렬되지 않은 1 ~ 100개의 게시물 리스트
     List<Article> filteredArticles = articles;
 
-    if(params.containsKey("searchKeyword")) {
+    if (params.containsKey("searchKeyword")) {
       String searchKeyword = params.get("searchKeyword");
 
       filteredArticles = new ArrayList<>();
 
-      for(Article article : articles) {
+      for (Article article : articles) {
         boolean matched = article.subject.contains(searchKeyword) || article.content.contains(searchKeyword);
 
-        if(matched) filteredArticles.add(article);
+        if (matched) filteredArticles.add(article);
       }
     }
 
@@ -126,13 +131,13 @@ public class Main {
     // 정렬 로직 시작
     boolean orderByIdDesc = true;
 
-    if(params.containsKey("orderBy") && params.get("orderBy").equals("idAsc")) {
+    if (params.containsKey("orderBy") && params.get("orderBy").equals("idAsc")) {
       orderByIdDesc = false;
     }
 
     List<Article> sortedArticles = filteredArticles;
 
-    if(orderByIdDesc) {
+    if (orderByIdDesc) {
       sortedArticles = Util.reverseList(sortedArticles);
     }
     // 정렬 로직 끝
