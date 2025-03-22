@@ -46,40 +46,7 @@ public class Main {
         articles.add(article);
         System.out.printf("%d번 게시물이 등록되었습니다.\n", article.id);
       } else if (rq.getUrlPath().equals("/usr/article/detail")) {
-        Map<String, String> params = rq.getParams();
-
-        if(!params.containsKey("id")) {
-          System.out.println("id값을 입력해주세요.");
-          continue;
-        }
-
-        int id = 0;
-
-        try {
-          id = Integer.parseInt(params.get("id"));
-        } catch (NumberFormatException e) {
-          System.out.println("id를 정수형태로 입력해주세요.");
-          continue;
-        }
-
-        // 리스트에 게시물이 비어 있는 경우
-        if (articles.isEmpty()) {
-          System.out.println("게시물이 존재하지 않습니다.");
-          continue;
-        }
-
-        if(id > articles.size()) {
-          System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
-          continue;
-        }
-
-        Article article = articles.get(id - 1);
-
-        System.out.println("== 게시물 상세보기 ==");
-        System.out.printf("번호 : %d\n", article.id);
-        System.out.printf("제목 : %s\n", article.subject);
-        System.out.printf("내용 : %s\n", article.content);
-
+        actionUsrArticleShowDetail(articles, rq);
       } else if (rq.getUrlPath().equals("/usr/article/list")) {
         actionUsrArticleShowList(articles, rq);
       } else if (rq.getUrlPath().equals("exit")) {
@@ -92,6 +59,42 @@ public class Main {
 
     System.out.println("== JAVA 텍스트 게시판 종료 ==");
     sc.close();
+  }
+
+  private static void actionUsrArticleShowDetail(List<Article> articles, Rq rq) {
+    Map<String, String> params = rq.getParams();
+
+    if(!params.containsKey("id")) {
+      System.out.println("id값을 입력해주세요.");
+      return;
+    }
+
+    int id = 0;
+
+    try {
+      id = Integer.parseInt(params.get("id"));
+    } catch (NumberFormatException e) {
+      System.out.println("id를 정수형태로 입력해주세요.");
+      return;
+    }
+
+    // 리스트에 게시물이 비어 있는 경우
+    if (articles.isEmpty()) {
+      System.out.println("게시물이 존재하지 않습니다.");
+      return;
+    }
+
+    if(id > articles.size()) {
+      System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
+      return;
+    }
+
+    Article article = articles.get(id - 1);
+
+    System.out.println("== 게시물 상세보기 ==");
+    System.out.printf("번호 : %d\n", article.id);
+    System.out.printf("제목 : %s\n", article.subject);
+    System.out.printf("내용 : %s\n", article.content);
   }
 
   private static void actionUsrArticleShowList(List<Article> articles, Rq rq) {
