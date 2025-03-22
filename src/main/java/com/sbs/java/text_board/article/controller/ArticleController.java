@@ -1,6 +1,7 @@
 package com.sbs.java.text_board.article.controller;
 
 import com.sbs.java.text_board.article.dto.Article;
+import com.sbs.java.text_board.article.service.ArticleService;
 import com.sbs.java.text_board.base.Rq;
 import com.sbs.java.text_board.container.Container;
 import com.sbs.java.text_board.util.Util;
@@ -8,42 +9,48 @@ import com.sbs.java.text_board.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.IntStream;
 
 public class ArticleController {
-  private List<Article> articles;
-  private int lastArticleId;
+  private ArticleService articleService;
 
   public ArticleController() {
-    articles = new ArrayList<>();
-    lastArticleId = 0;
-
-    makeArticleTestData();
+    articleService = Container.articleService;
   }
 
-  public void makeArticleTestData() {
-    IntStream.rangeClosed(1, 100)
-        .forEach(
-            i -> articles.add(new Article(i, "제목" + i, "내용" + i))
-        );
-  }
-
-  public void doWrite() {lastArticleId = articles.get(articles.size() - 1).id;
+  public void doWrite() {
+    String subject;
+    String content;
 
     System.out.println("== 게시물 작성 ==");
-    System.out.print("제목 : ");
-    String subject = Container.scanner.nextLine();
 
-    System.out.print("내용 : ");
-    String content = Container.scanner.nextLine();
+    // 제목 입력
+    while (true) {
+      System.out.print("제목 : ");
+      subject = Container.scanner.nextLine();
 
-    int id = ++lastArticleId;
+      if (subject.trim().isEmpty()) {
+        System.out.println("제목을 입력해주세요.");
+        continue;
+      }
 
-    Article article = new Article(id, subject, content);
+      break;
+    }
 
-    articles.add(article);
-    System.out.printf("%d번 게시물이 등록되었습니다.\n", article.id);
+    // 내용 입력
+    while (true) {
+      System.out.print("내용 : ");
+      content = Container.scanner.nextLine();
 
+      if (content.trim().isEmpty()) {
+        System.out.println("내용을 입력해주세요.");
+        continue;
+      }
+
+      break;
+    }
+
+    int id = articleService.save(subject, content);
+    System.out.printf("%d번 게시물이 등록되었습니다.\n", id);
   }
 
   public void showDetail(Rq rq) {
@@ -63,13 +70,15 @@ public class ArticleController {
       return;
     }
 
+    List<Article> articles = articleService.findAll();
+
     // 리스트에 게시물이 비어 있는 경우
     if (articles.isEmpty()) {
       System.out.println("게시물이 존재하지 않습니다.");
       return;
     }
 
-    Article article = findById(articles, id);
+    Article article = articleService.findById(id);
 
     if (article == null) {
       System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
@@ -83,6 +92,8 @@ public class ArticleController {
   }
 
   public void showList(Rq rq) {
+    List<Article> articles = articleService.findAll();
+
     if (articles.isEmpty()) {
       System.out.println("게시물이 존재하지 않습니다.");
       return;
@@ -147,24 +158,51 @@ public class ArticleController {
       return;
     }
 
+    List<Article> articles = articleService.findAll();
+
     // 리스트에 게시물이 비어 있는 경우
     if (articles.isEmpty()) {
       System.out.println("게시물이 존재하지 않습니다.");
       return;
     }
 
-    Article article = findById(articles, id);
+    Article article = articleService.findById(id);
 
     if (article == null) {
       System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
       return;
     }
 
-    System.out.print("새 제목 : ");
-    article.subject = Container.scanner.nextLine();
+    String subject;
+    String content;
 
-    System.out.print("새 내용 : ");
-    article.content = Container.scanner.nextLine();
+    // 제목 입력
+    while (true) {
+      System.out.print("새 제목 : ");
+      subject = Container.scanner.nextLine();
+
+      if (subject.trim().isEmpty()) {
+        System.out.println("제목을 입력해주세요.");
+        continue;
+      }
+
+      break;
+    }
+
+    // 내용 입력
+    while (true) {
+      System.out.print("새 내용 : ");
+      content = Container.scanner.nextLine();
+
+      if (content.trim().isEmpty()) {
+        System.out.println("내용을 입력해주세요.");
+        continue;
+      }
+
+      break;
+    }
+
+    articleService.modify(id, subject, content);
 
     System.out.printf("%d번 게시물이 수정되었습니다.\n", article.id);
   }
@@ -186,28 +224,23 @@ public class ArticleController {
       return;
     }
 
+    List<Article> articles = articleService.findAll();
+
     // 리스트에 게시물이 비어 있는 경우
     if (articles.isEmpty()) {
       System.out.println("게시물이 존재하지 않습니다.");
       return;
     }
 
-    Article article = findById(articles, id);
+    Article article = articleService.findById(id);
 
     if (article == null) {
       System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
       return;
     }
 
-    articles.remove(article);
+    articleService.remove(id);
 
     System.out.printf("%d번 게시물을 삭제하였습니다.\n", id);
-  }
-
-  private Article findById(List<Article> articles, int id) {
-    return articles.stream()
-        .filter(article -> article.id == id)
-        .findFirst()
-        .orElse(null);
   }
 }
