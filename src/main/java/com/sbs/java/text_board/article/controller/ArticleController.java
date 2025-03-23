@@ -8,7 +8,6 @@ import com.sbs.java.text_board.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class ArticleController {
   private ArticleService articleService;
@@ -61,14 +60,6 @@ public class ArticleController {
       return;
     }
 
-    List<Article> articles = articleService.findAll();
-
-    // 리스트에 게시물이 비어 있는 경우
-    if (articles.isEmpty()) {
-      System.out.println("게시물이 존재하지 않습니다.");
-      return;
-    }
-
     Article article = articleService.findById(id);
 
     if (article == null) {
@@ -83,47 +74,20 @@ public class ArticleController {
   }
 
   public void showList(Rq rq) {
-    List<Article> articles = articleService.findAll();
+    String searchKeyword = rq.getParam("searchKeyword", "");
+    String orderBy = rq.getParam("orderBy", "idDesc");
+
+    List<Article> articles = articleService.findAll(searchKeyword, orderBy);
 
     if (articles.isEmpty()) {
       System.out.println("게시물이 존재하지 않습니다.");
       return;
     }
 
-    Map<String, String> params = rq.getParams();
-
-    // 검색 기능 시작
-    // articles : 현재 정렬되지 않은 1 ~ 100개의 게시물 리스트
-    List<Article> filteredArticles = articles;
-    String searchKeyword = rq.getParam("searchKeyword", "");
-
-    if (!searchKeyword.isEmpty()) {
-      filteredArticles = new ArrayList<>();
-
-      for (Article article : articles) {
-        boolean matched = article.subject.contains(searchKeyword) || article.content.contains(searchKeyword);
-
-        if (matched) filteredArticles.add(article);
-      }
-    }
-
-    // 검색 기능 끝
-
-    // 정렬 로직 시작
-    String orderBy = rq.getParam("orderBy", "idDesc");
-    boolean orderByIdDesc = orderBy.equals("idDesc");
-
-    List<Article> sortedArticles = filteredArticles;
-
-    if (orderByIdDesc) {
-      sortedArticles = Util.reverseList(sortedArticles);
-    }
-    // 정렬 로직 끝
-
     System.out.println("== 게시물 리스트 ==");
     System.out.println("번호 | 제목");
 
-    sortedArticles.forEach(
+    articles.forEach(
         article -> System.out.printf("%d | %s\n", article.id, article.subject)
     );
   }
@@ -133,14 +97,6 @@ public class ArticleController {
 
     if(id == 0) {
       System.out.println("올바른 값을 입력해주세요.");
-      return;
-    }
-
-    List<Article> articles = articleService.findAll();
-
-    // 리스트에 게시물이 비어 있는 경우
-    if (articles.isEmpty()) {
-      System.out.println("게시물이 존재하지 않습니다.");
       return;
     }
 
@@ -190,14 +146,6 @@ public class ArticleController {
 
     if(id == 0) {
       System.out.println("올바른 값을 입력해주세요.");
-      return;
-    }
-
-    List<Article> articles = articleService.findAll();
-
-    // 리스트에 게시물이 비어 있는 경우
-    if (articles.isEmpty()) {
-      System.out.println("게시물이 존재하지 않습니다.");
       return;
     }
 

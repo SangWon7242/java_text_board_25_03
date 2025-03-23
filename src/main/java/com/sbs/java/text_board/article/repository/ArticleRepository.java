@@ -1,6 +1,7 @@
 package com.sbs.java.text_board.article.repository;
 
 import com.sbs.java.text_board.article.dto.Article;
+import com.sbs.java.text_board.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +33,35 @@ public class ArticleRepository {
     return article.id;
   }
 
-  public List<Article> findAll() {
-    return articles;
+
+  private List<Article> findAllOrderById(String orderBy) {
+    List<Article> sortedArticles = articles;
+
+    if(orderBy.equals("idAsc")) {
+      return articles;
+    }
+
+    if(orderBy.equals("idDesc")) {
+      sortedArticles = Util.reverseList(articles);
+    }
+
+    return sortedArticles;
+  }
+
+  public List<Article> findAll(String searchKeyword, String orderBy) {
+    List<Article> filteredArticles = findAllOrderById(orderBy);
+
+    if (!searchKeyword.isEmpty()) {
+      filteredArticles = new ArrayList<>();
+
+      for (Article article : articles) {
+        boolean matched = article.subject.contains(searchKeyword) || article.content.contains(searchKeyword);
+
+        if (matched) filteredArticles.add(article);
+      }
+    }
+
+    return filteredArticles;
   }
 
   public Article findById(int id) {
