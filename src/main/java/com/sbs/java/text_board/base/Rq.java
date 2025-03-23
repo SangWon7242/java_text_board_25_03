@@ -9,7 +9,7 @@ public class Rq {
   private String url;
   @Getter
   private Map<String, String> params;
-  
+
   @Getter
   private String urlPath;
 
