@@ -17,6 +17,7 @@ public class MemberController {
     String loginPw;
     String loginPwConfirm;
     String name;
+    Member member;
 
     System.out.println("== 회원 가입 ==");
 
@@ -27,6 +28,13 @@ public class MemberController {
 
       if (loginId.trim().isEmpty()) {
         System.out.println("로그인 아이디를 입력해주세요.");
+        continue;
+      }
+
+      member = memberService.findByLoginId(loginId);
+
+      if(member != null) {
+        System.out.println("이미 가입 된 로그인 아이디입니다.");
         continue;
       }
 
