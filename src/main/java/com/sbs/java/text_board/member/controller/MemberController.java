@@ -3,17 +3,16 @@ package com.sbs.java.text_board.member.controller;
 import com.sbs.java.text_board.base.Rq;
 import com.sbs.java.text_board.container.Container;
 import com.sbs.java.text_board.member.dto.Member;
+import com.sbs.java.text_board.member.service.MemberService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MemberController {
-  private List<Member> members;
-  private int lastId;
+  private MemberService memberService;
 
   public MemberController() {
-    members = new ArrayList<>();
-    lastId = 0;
+    memberService = Container.memberService;
   }
 
   public void doJoin(Rq rq) {
@@ -80,12 +79,8 @@ public class MemberController {
       break;
     }
 
-    int id = ++lastId;
+    memberService.join(loginId, loginPw, name);
 
-    Member member = new Member(id, loginId, loginPw, name);
-
-    members.add(member);
-
-    System.out.printf("'%s'님 회원 가입 되었습니다.\n", member.getLoginId());
+    System.out.printf("'%s'님 회원 가입 되었습니다.\n", loginId);
   }
 }
