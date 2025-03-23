@@ -52,9 +52,11 @@ public class ArticleRepository {
     List<Article> filteredArticles = findAllOrderById(orderBy);
 
     if (!searchKeyword.isEmpty()) {
+      List<Article> sortedArticles = findAllOrderById(orderBy);
+
       filteredArticles = new ArrayList<>();
 
-      for (Article article : articles) {
+      for (Article article : sortedArticles) {
         boolean matched = article.subject.contains(searchKeyword) || article.content.contains(searchKeyword);
 
         if (matched) filteredArticles.add(article);
