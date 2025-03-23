@@ -30,7 +30,7 @@ public class ArticleRepository {
 
     articles.add(article);
 
-    return article.id;
+    return article.getId();
   }
 
 
@@ -57,7 +57,7 @@ public class ArticleRepository {
       filteredArticles = new ArrayList<>();
 
       for (Article article : sortedArticles) {
-        boolean matched = article.subject.contains(searchKeyword) || article.content.contains(searchKeyword);
+        boolean matched = article.getSubject().contains(searchKeyword) || article.getContent().contains(searchKeyword);
 
         if (matched) filteredArticles.add(article);
       }
@@ -68,7 +68,7 @@ public class ArticleRepository {
 
   public Article findById(int id) {
     return articles.stream()
-        .filter(article -> article.id == id)
+        .filter(article -> article.getId() == id)
         .findFirst()
         .orElse(null);
   }
@@ -76,8 +76,8 @@ public class ArticleRepository {
   public void modify(int id, String subject, String content) {
     Article article = findById(id);
 
-    article.subject = subject;
-    article.content = content;
+    article.setSubject(subject);
+    article.setContent(content);
   }
 
   public void remove(int id) {
