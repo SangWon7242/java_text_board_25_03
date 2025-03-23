@@ -1,6 +1,7 @@
 package com.sbs.java.text_board.member.service;
 
 import com.sbs.java.text_board.container.Container;
+import com.sbs.java.text_board.member.dto.Member;
 import com.sbs.java.text_board.member.repository.MemberRepository;
 
 public class MemberService {
@@ -12,5 +13,9 @@ public class MemberService {
 
   public void join(String loginId, String loginPw, String name) {
     memberRepository.join(loginId, loginPw, name);
+  }
+
+  public Member findByLoginId(String loginId) {
+    return memberRepository.findByLoginId(loginId);
   }
 }
