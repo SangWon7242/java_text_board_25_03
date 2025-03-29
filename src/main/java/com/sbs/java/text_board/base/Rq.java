@@ -20,12 +20,14 @@ public class Rq {
 
   public String loginedMember = "loginedMember";
 
-  public Rq(String url) {
+  public Rq() {
+    session = Container.session;
+  }
+
+  public void setCommand(String url) {
     this.url = url;
     params = Util.getParamsFromUrl(this.url);
     urlPath = Util.getPathFromUrl(this.url);
-
-    session = Container.session;
   }
 
   public int getIntParam(String paramName, int defaultValue) {

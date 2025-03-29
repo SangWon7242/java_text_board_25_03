@@ -4,24 +4,40 @@ import com.sbs.java.text_board.article.controller.ArticleController;
 import com.sbs.java.text_board.base.Rq;
 import com.sbs.java.text_board.container.Container;
 import com.sbs.java.text_board.member.controller.MemberController;
+import com.sbs.java.text_board.member.dto.Member;
+import com.sbs.java.text_board.session.Session;
 
 public class App {
   public MemberController memberController;
   public ArticleController articleController;
+  public Session session;
 
   public App() {
     memberController = Container.memberController;
     articleController = Container.articleController;
+
+    session = Container.session;
   }
 
   public void run() {
     System.out.println("== JAVA 텍스트 게시판 구현 ==");
 
     while (true) {
-      System.out.print("명령어) ");
+
+      Rq rq = new Rq();
+
+      Member member = (Member) rq.getSessionAttr("loginedMember");
+
+      String promptName = "명령어";
+
+      if(member != null) {
+        promptName = member.getLoginId();
+      }
+
+      System.out.printf("%s) ", promptName);
       String cmd = Container.scanner.nextLine();
 
-      Rq rq = new Rq(cmd);
+      rq.setCommand(cmd);
 
       if (rq.getUrlPath().equals("/usr/article/write")) {
         articleController.doWrite();
@@ -39,6 +55,8 @@ public class App {
         memberController.doLogin(rq);
       } else if (rq.getUrlPath().equals("/usr/member/logout")) {
         memberController.doLogout(rq);
+      } else if (rq.getUrlPath().equals("/usr/member/mypage")) {
+        memberController.showMyPage(rq);
       } else if (rq.getUrlPath().equals("exit")) {
         System.out.println("게시판 프로그램을 종료합니다.");
         break;

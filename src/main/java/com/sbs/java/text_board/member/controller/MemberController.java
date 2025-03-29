@@ -172,4 +172,18 @@ public class MemberController {
 
     System.out.println("로그아웃 되었습니다.");
   }
+
+  public void showMyPage(Rq rq) {
+    if(rq.isLogout()) {
+      System.out.println("로그인 후 사용해주세요.");
+      return;
+    }
+
+    Member member = (Member) rq.getSessionAttr("loginedMember");
+
+    System.out.println("== 내 정보 ==");
+    System.out.printf("아이디 : %s\n", member.getLoginId());
+    System.out.printf("비밀번호 : %s\n", "*******");
+    System.out.printf("이름 : %s\n", member.getName());
+  }
 }
