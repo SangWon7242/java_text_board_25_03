@@ -25,15 +25,17 @@ public class App {
 
   public void run() {
     System.out.println("== JAVA 텍스트 게시판 구현 ==");
+    
+    // 프로그램이 실행되자마 1번 회원이 로그인 될 수 있도록
+    forTestLoginByMemberId(1);
 
     while (true) {
       Rq rq = new Rq();
 
-      Member member = (Member) rq.getSessionAttr("loginedMember");
-
       String promptName = "명령어";
 
-      if(member != null) {
+      if(rq.isLogined()) {
+        Member member = rq.getLoginedMember();
         promptName = member.getLoginId();
       }
 
@@ -74,6 +76,14 @@ public class App {
 
     System.out.println("== JAVA 텍스트 게시판 종료 ==");
     Container.scanner.close();
+  }
+
+  private void forTestLoginByMemberId(int id) {
+    Member member = Container.memberService.findById(id);
+
+    if(member == null) return;
+
+    new Rq().login(member);
   }
 
   private boolean runInterceptor(Rq rq) {
