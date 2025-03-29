@@ -113,6 +113,15 @@ public class ArticleController {
       return;
     }
 
+    Member member = (Member) rq.getSessionAttr("loginedMember");
+
+    if(!article.getWriterName().equals(member.getLoginId())) {
+      System.out.println("게시물에 대한 접근 권한이 없습니다.");
+      return;
+    }
+
+    System.out.printf("== %d번 게시물 수정 ==\n", id);
+
     String subject;
     String content;
 
@@ -159,6 +168,13 @@ public class ArticleController {
 
     if (article == null) {
       System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
+      return;
+    }
+
+    Member member = (Member) rq.getSessionAttr("loginedMember");
+
+    if(!article.getWriterName().equals(member.getLoginId())) {
+      System.out.println("게시물에 대한 접근 권한이 없습니다.");
       return;
     }
 
