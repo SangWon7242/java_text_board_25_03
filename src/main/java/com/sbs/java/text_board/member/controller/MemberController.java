@@ -13,11 +13,6 @@ public class MemberController {
   }
 
   public void doJoin(Rq rq) {
-    if(rq.isLogined()) {
-      System.out.println("이미 로그인 상태입니다.");
-      return;
-    }
-
     System.out.println("== 회원 가입 ==");
 
     String loginId;
@@ -95,12 +90,6 @@ public class MemberController {
   }
 
   public void doLogin(Rq rq) {
-
-    if(rq.isLogined()) {
-      System.out.println("이미 로그인 상태입니다.");
-      return;
-    }
-
     System.out.println("== 로그인 ==");
 
     String loginId;
@@ -163,22 +152,12 @@ public class MemberController {
   }
 
   public void doLogout(Rq rq) {
-    if(rq.isLogout()) {
-      System.out.println("이미 로그아웃 상태입니다.");
-      return;
-    }
-
     rq.removeSessionAttr("loginedMember");
 
     System.out.println("로그아웃 되었습니다.");
   }
 
   public void showMyPage(Rq rq) {
-    if(rq.isLogout()) {
-      System.out.println("로그인 후 사용해주세요.");
-      return;
-    }
-
     Member member = (Member) rq.getSessionAttr("loginedMember");
 
     System.out.println("== 내 정보 ==");
