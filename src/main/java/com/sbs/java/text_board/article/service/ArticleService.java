@@ -12,8 +12,8 @@ public class ArticleService {
     articleRepository = new ArticleRepository();
   }
 
-  public int save(String subject, String content, String writerName) {
-    return articleRepository.save(subject, content, writerName);
+  public int save(String subject, String content, int memberId, String writerName) {
+    return articleRepository.save(subject, content, memberId, writerName);
   }
 
   public List<Article> findAll(String searchKeyword, String orderBy) {

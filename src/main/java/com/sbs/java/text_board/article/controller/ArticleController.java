@@ -49,9 +49,10 @@ public class ArticleController {
 
     Member member = (Member) rq.getSessionAttr("loginedMember");
 
+    int memberId = member.getId();
     String writerName = member.getLoginId();
 
-    int id = articleService.save(subject, content, writerName);
+    int id = articleService.save(subject, content, memberId, writerName);
     System.out.printf("%d번 게시물이 등록되었습니다.\n", id);
   }
 

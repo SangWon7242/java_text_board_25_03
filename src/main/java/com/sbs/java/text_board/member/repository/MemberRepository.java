@@ -18,8 +18,9 @@ public class MemberRepository {
   }
 
   public void makeMemberTestData() {
-    IntStream.rangeClosed(1, 3)
-        .forEach(i -> join("user" + i, "user" + i, "이름" + i));
+    join("user1", "1234", "양관식");
+    join("user2", "12345", "오애순");
+    join("love", "5566", "양금명");
   }
 
   public void join(String loginId, String loginPw, String name) {
