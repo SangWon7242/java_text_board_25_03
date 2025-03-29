@@ -20,13 +20,13 @@ public class ArticleRepository {
 
   public void makeArticleTestData() {
     IntStream.rangeClosed(1, 100)
-        .forEach(i -> save("제목" + i, "내용" + i, 1, "user1"));
+        .forEach(i -> save("제목" + i, "내용" + i, 1, (int)(Math.random() * 2) + 1, "user1"));
   }
 
-  public int save(String subject, String content, int memberId, String writerName) {
+  public int save(String subject, String content, int memberId, int boardId, String writerName) {
     int id = ++lastId;
 
-    Article article = new Article(id, subject, content, memberId, writerName);
+    Article article = new Article(id, subject, content, memberId, boardId, writerName);
 
     articles.add(article);
 
