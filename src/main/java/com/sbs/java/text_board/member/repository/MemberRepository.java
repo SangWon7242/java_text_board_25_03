@@ -4,6 +4,7 @@ import com.sbs.java.text_board.member.dto.Member;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class MemberRepository {
   private List<Member> members;
@@ -12,6 +13,13 @@ public class MemberRepository {
   public MemberRepository() {
     members = new ArrayList<>();
     lastId = 0;
+
+    makeMemberTestData();
+  }
+
+  public void makeMemberTestData() {
+    IntStream.rangeClosed(1, 3)
+        .forEach(i -> join("user" + i, "user" + i, "이름" + i));
   }
 
   public void join(String loginId, String loginPw, String name) {
