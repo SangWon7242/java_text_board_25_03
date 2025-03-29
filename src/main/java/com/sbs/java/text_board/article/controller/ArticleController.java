@@ -3,22 +3,28 @@ package com.sbs.java.text_board.article.controller;
 import com.sbs.java.text_board.article.dto.Article;
 import com.sbs.java.text_board.article.service.ArticleService;
 import com.sbs.java.text_board.base.Rq;
+import com.sbs.java.text_board.board.dto.Board;
+import com.sbs.java.text_board.board.service.BoardService;
 import com.sbs.java.text_board.container.Container;
 import com.sbs.java.text_board.member.dto.Member;
 
 import java.util.List;
 
 public class ArticleController {
+  private BoardService boardService;
   private ArticleService articleService;
 
   public ArticleController() {
+    boardService = Container.boardService;
     articleService = Container.articleService;
   }
 
   public void doWrite(Rq rq) {
     int boardId = rq.getIntParam("boardId", 1);
 
-    System.out.println("== 게시물 작성 ==");
+    Board board = boardService.findByBoardId(boardId);
+
+    System.out.printf("== %s 게시물 작성 ==\n", board.getName());
 
     String subject;
     String content;
@@ -74,8 +80,9 @@ public class ArticleController {
       return;
     }
 
-    System.out.println("== 게시물 상세보기 ==");
-    System.out.printf("게시물 번호 : %d\n", article.getBoardId());
+    Board board = boardService.findByBoardId(article.getBoardId());
+
+    System.out.printf("== %s 게시물 상세보기 ==\n", board.getName());
     System.out.printf("번호 : %d\n", article.getId());
     System.out.printf("제목 : %s\n", article.getSubject());
     System.out.printf("내용 : %s\n", article.getContent());

@@ -3,6 +3,8 @@ package com.sbs.java.text_board.container;
 import com.sbs.java.text_board.article.controller.ArticleController;
 import com.sbs.java.text_board.article.repository.ArticleRepository;
 import com.sbs.java.text_board.article.service.ArticleService;
+import com.sbs.java.text_board.board.repository.BoardRepository;
+import com.sbs.java.text_board.board.service.BoardService;
 import com.sbs.java.text_board.interceptor.NeedLoginInterceptor;
 import com.sbs.java.text_board.interceptor.NeedLogoutInterceptor;
 import com.sbs.java.text_board.member.controller.MemberController;
@@ -19,9 +21,11 @@ public class Container {
   public static NeedLoginInterceptor needLoginInterceptor;
   public static NeedLogoutInterceptor needLogoutInterceptor;
 
+  public static BoardRepository boardRepository;
   public static MemberRepository memberRepository;
   public static ArticleRepository articleRepository;
 
+  public static BoardService boardService;
   public static MemberService memberService;
   public static ArticleService articleService;
 
@@ -35,9 +39,11 @@ public class Container {
     needLoginInterceptor = new NeedLoginInterceptor();
     needLogoutInterceptor = new NeedLogoutInterceptor();
 
+    boardRepository = new BoardRepository();
     memberRepository = new MemberRepository();
     articleRepository = new ArticleRepository();
 
+    boardService = new BoardService();
     memberService = new MemberService();
     articleService = new ArticleService();
 
