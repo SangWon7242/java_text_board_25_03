@@ -47,7 +47,7 @@ public class App {
       }
 
       if (rq.getUrlPath().equals("/usr/article/write")) {
-        articleController.doWrite();
+        articleController.doWrite(rq);
       } else if (rq.getUrlPath().equals("/usr/article/detail")) {
         articleController.showDetail(rq);
       } else if (rq.getUrlPath().equals("/usr/article/list")) {

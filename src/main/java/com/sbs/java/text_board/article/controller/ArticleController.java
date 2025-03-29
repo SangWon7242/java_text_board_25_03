@@ -4,6 +4,7 @@ import com.sbs.java.text_board.article.dto.Article;
 import com.sbs.java.text_board.article.service.ArticleService;
 import com.sbs.java.text_board.base.Rq;
 import com.sbs.java.text_board.container.Container;
+import com.sbs.java.text_board.member.dto.Member;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public class ArticleController {
     articleService = Container.articleService;
   }
 
-  public void doWrite() {
+  public void doWrite(Rq rq) {
     String subject;
     String content;
 
@@ -46,14 +47,18 @@ public class ArticleController {
       break;
     }
 
-    int id = articleService.save(subject, content);
+    Member member = (Member) rq.getSessionAttr("loginedMember");
+
+    String writerName = member.getLoginId();
+
+    int id = articleService.save(subject, content, writerName);
     System.out.printf("%d번 게시물이 등록되었습니다.\n", id);
   }
 
   public void showDetail(Rq rq) {
     int id = rq.getIntParam("id", 0);
 
-    if(id == 0) {
+    if (id == 0) {
       System.out.println("올바른 값을 입력해주세요.");
       return;
     }
@@ -69,6 +74,7 @@ public class ArticleController {
     System.out.printf("번호 : %d\n", article.getId());
     System.out.printf("제목 : %s\n", article.getSubject());
     System.out.printf("내용 : %s\n", article.getContent());
+    System.out.printf("작성자 : %s\n", article.getWriterName());
   }
 
   public void showList(Rq rq) {
@@ -83,17 +89,19 @@ public class ArticleController {
     }
 
     System.out.println("== 게시물 리스트 ==");
-    System.out.println("번호 | 제목");
+    System.out.println("번호 | 제목 | 작성자");
 
     articles.forEach(
-        article -> System.out.printf("%d | %s\n", article.getId(), article.getSubject())
+        article ->
+            System.out.printf("%d | %s | %s\n", article.getId(), article.getSubject(), article.getWriterName()
+            )
     );
   }
 
   public void doModify(Rq rq) {
     int id = rq.getIntParam("id", 0);
 
-    if(id == 0) {
+    if (id == 0) {
       System.out.println("올바른 값을 입력해주세요.");
       return;
     }
@@ -142,7 +150,7 @@ public class ArticleController {
   public void doDelete(Rq rq) {
     int id = rq.getIntParam("id", 0);
 
-    if(id == 0) {
+    if (id == 0) {
       System.out.println("올바른 값을 입력해주세요.");
       return;
     }
