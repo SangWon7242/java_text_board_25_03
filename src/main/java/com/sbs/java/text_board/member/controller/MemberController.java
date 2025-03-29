@@ -13,13 +13,18 @@ public class MemberController {
   }
 
   public void doJoin(Rq rq) {
+    if(rq.isLogined()) {
+      System.out.println("이미 로그인 상태입니다.");
+      return;
+    }
+
+    System.out.println("== 회원 가입 ==");
+
     String loginId;
     String loginPw;
     String loginPwConfirm;
     String name;
     Member member;
-
-    System.out.println("== 회원 가입 ==");
 
     // 로그인 아이디 입력
     while (true) {
@@ -90,11 +95,17 @@ public class MemberController {
   }
 
   public void doLogin(Rq rq) {
+
+    if(rq.isLogined()) {
+      System.out.println("이미 로그인 상태입니다.");
+      return;
+    }
+
+    System.out.println("== 로그인 ==");
+
     String loginId;
     String loginPw;
     Member member;
-
-    System.out.println("== 로그인 ==");
 
     // 로그인 아이디 입력
     while (true) {
@@ -144,7 +155,21 @@ public class MemberController {
 
       break;
     }
+    
+    // 세션에 로그인 데이터 저장
+    rq.setSessionAttr("loginedMember", member);
 
     System.out.printf("'%s'님 로그인 되었습니다.\n", loginId);
+  }
+
+  public void doLogout(Rq rq) {
+    if(rq.isLogout()) {
+      System.out.println("이미 로그아웃 상태입니다.");
+      return;
+    }
+
+    rq.removeSessionAttr("loginedMember");
+
+    System.out.println("로그아웃 되었습니다.");
   }
 }
